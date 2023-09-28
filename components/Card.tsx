@@ -9,7 +9,7 @@ interface CardProps {
   return (
     <Button variant={"default"} className="w-52">
         <div>
-        <div> {country}</div>
+        <div>{country}</div>
         <div>{capital}</div>
         </div>
     </Button>

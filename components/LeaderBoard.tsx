@@ -2,7 +2,9 @@ import Title from "./Title"
 
 const LeaderBoard = () => {
   return (
-    <section>
+    <section 
+    className="shadow-md"
+    >
      <Title title={'Leaderboard'}/>
     </section>
   )

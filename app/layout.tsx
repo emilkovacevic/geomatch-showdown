@@ -4,6 +4,7 @@ import { Noto_Sans } from "next/font/google";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LeaderBoard from "@/components/LeaderBoard";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Noto_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -18,8 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} flex flex-col min-h-screen`}>
+      <ThemeProvider
+            storageKey="website_theme"
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
         <Header />
         <div className="flex flex-wrap-reverse gap-6 grow">
           <div className="md:w-3/4 sm:2/3">{children}</div>
@@ -28,6 +36,7 @@ export default function RootLayout({
           </aside>
         </div>
         <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
