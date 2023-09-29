@@ -84,6 +84,6 @@ const PLAYERS = []
   }
   
 
-  fs.writeFileSync("players.js", `export const PLAYERS = ${JSON.stringify(PLAYERS, null, 2)};\n`);
+  fs.writeFileSync("players.ts", `export const PLAYERS = ${JSON.stringify(PLAYERS, null, 2)};\n`);
 
   
