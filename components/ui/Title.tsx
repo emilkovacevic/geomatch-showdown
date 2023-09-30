@@ -4,8 +4,10 @@ interface TitleProps {
 
 const Title = ({title}: TitleProps) => {
   return (
-    <section className="px-1">
-        <h2>{title}</h2>
+    <section>
+        <h2 
+        className="text-xl font-bold"
+        >{title}</h2>
     </section>
   )
 }
