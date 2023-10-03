@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Separator } from "@/components/ui/separator"
 import Input from "@/components/Input";
+import { useState } from "react";
 
 interface LoginData {
   email: string;
@@ -32,15 +33,22 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<LoginData>({ resolver: zodResolver(schema) });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const onSubmit: SubmitHandler<LoginData> = async (data) => {
     try {
       console.log(data)
-      signIn("credentials", {
+      const response = await signIn("credentials", {
         ...data,
         redirect: false,
       });
-    } catch (error) {
-     alert(error);
+      if (response?.error) {
+        setErrorMessage(response.error);
+      } else {
+        setErrorMessage(null);
+      }
+    } catch (error: any) {
+      setErrorMessage(error?.message);
     }
   };
 
@@ -51,6 +59,9 @@ const SignIn = () => {
       <div className="w-full px-8 pt-6 pb-8 mb-4 rounded shadow-md bg-card text-foreground md:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1 className="mb-4">Sign In</h1>
+          {errorMessage && (
+            <div className="my-2 text-red-500">Bad credentials</div>
+          )}
           <div className="mb-4">
             <Controller
               render={({ field }) => (
@@ -98,7 +109,7 @@ const SignIn = () => {
             Don&apos;t have an account?{" "}
             <Link
               href="/register"
-              className="mx-2 underline text-secondary"
+              className="mx-2 underline text-secondary dark:text-primary"
             >
               Register
             </Link>

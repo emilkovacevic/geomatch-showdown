@@ -1,21 +1,33 @@
 import Link from "next/link"
+import { getServerSession } from 'next-auth'
 import ThemeToggle from "../theme/ThemeToggle"
+import { options } from "@/app/api/auth/[...nextauth]/options"
+import UserMenu from "./UserMenu"
 
-const Header = () => {
+const Header = async () => {
+  const session = await getServerSession(options)
   return (
     <header 
     className="sticky top-0 z-50 px-1 py-2 bg-primary text-primary-foreground"
     >
-      <nav className="flex items-baseline justify-between gap-2">
+      <nav className="flex items-center justify-between gap-2">
        <Link
-       className="text-xl lg:text-2xl"
+       className="text-lg lg:text-xl"
        href="/">Geomatch Showdown</Link>
        <ul
        className="flex items-center gap-2"
        >
-        <li><Link href="/signin">SignIn</Link></li>
-        <li><Link href="/about">About</Link></li>
-        <li><ThemeToggle/></li>
+        {
+          session
+          ?
+            <li><UserMenu session={session} /></li>
+          :
+          <>
+            <li><Link href="/signin">SignIn</Link></li>
+            <Link href="/about">About</Link>
+            <li><ThemeToggle/></li>
+          </>
+        }
        </ul>
       </nav>
     </header>

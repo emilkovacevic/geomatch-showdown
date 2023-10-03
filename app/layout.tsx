@@ -7,6 +7,8 @@ import LeaderBoard from "@/components/aside/LeaderBoard";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import AuthProvider from "@/lib/auth-provider";
 import GoogleAnalytics from "@/lib/google-analytics";
+import ClientOnly from "@/lib/client-only";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Noto_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -34,6 +36,9 @@ export default function RootLayout({
             <Header />
             {children}
             <Footer />
+            <ClientOnly>
+              <Toaster />
+            </ClientOnly>
           </ThemeProvider>
         </AuthProvider>
         <GoogleAnalytics />
