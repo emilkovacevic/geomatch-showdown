@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -7,26 +7,22 @@ import { useSession } from "next-auth/react";
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
-  const session = useSession()
+  const { status } = useSession();
+
+  const isDarkTheme = theme === "dark";
+  const themeText = status === 'authenticated' ? <span className="pr-2">Theme</span> : null;
+
+  const toggleTheme = () => {
+    setTheme(isDarkTheme ? "light" : "dark");
+  };
 
   return (
-    <section>
-      {theme === "dark" ? (
-        <Button
-        className="inline-flex gap-2"
-        variant={"reset"} onClick={() => setTheme("light")}>
-          {session.status === 'authenticated' ? 'Theme ' : null}
-          <Sun size={18} />
-        </Button>
-      ) : (
-        <Button
-        className="inline-flex gap-2"
-        variant={"reset"} onClick={() => setTheme("dark")}>
-           {session.status === 'authenticated'  ? 'Theme ' : null}
-          <Moon size={18} />
-        </Button>
-      )}
-    </section>
+      <Button
+      className={`${themeText ? 'w-full' : 'ml-4' }`}
+      variant="reset" onClick={toggleTheme}>
+        {themeText}
+        {isDarkTheme ? <Sun size={18} /> : <Moon size={18} />}
+      </Button>
   );
 };
 

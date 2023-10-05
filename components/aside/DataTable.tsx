@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatDate } from "@/lib/format-iso-date";
 
 interface DataTableProps {
   players: {
@@ -24,18 +25,6 @@ export const DataTable: React.FC<DataTableProps> = ({
   players,
   placementNumbers,
 }) => {
-  function formatDate(isoDateString: string): string {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-
-    const date = new Date(isoDateString);
-    return date.toLocaleDateString("en-US", options);
-  }
 
   function formatTime(seconds: number) {
     const days = Math.floor(seconds / (60 * 60 * 24));

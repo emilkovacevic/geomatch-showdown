@@ -24,7 +24,7 @@ const Header = async () => {
           :
           <>
             <li><Link href="/signin">SignIn</Link></li>
-            <Link href="/about">About</Link>
+            <li><Link href="/about">About</Link></li>
             <li><ThemeToggle/></li>
           </>
         }

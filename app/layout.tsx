@@ -33,9 +33,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <div className="flex flex-col min-h-screen">
             <Header />
             {children}
             <Footer />
+            </div>
             <ClientOnly>
               <Toaster />
             </ClientOnly>

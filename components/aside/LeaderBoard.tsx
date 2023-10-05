@@ -20,7 +20,6 @@ interface PlacementNumbers {
 }
 
 const LeaderBoard = () => {
-  const [players, setPlayers] = useState<Player[]>(PLAYERS)
   const [sortedPlayers, setSortedPlayers] = useState<Player[]>(PLAYERS);
   const [currentPage, setCurrentPage] = useState(1)
   const [playersPerPage] = useState(10)

@@ -19,7 +19,7 @@ interface UserMenuProps {
 
 const UserMenu = ({session}: UserMenuProps) => {
   return (
-    <Menubar className="p-0 m-0 bg-transparent border-none h-fit">
+    <Menubar className="bg-transparent border-none">
       <MenubarMenu>
         <MenubarTrigger>
           <Avatar>
@@ -28,9 +28,9 @@ const UserMenu = ({session}: UserMenuProps) => {
           </Avatar>
         </MenubarTrigger>
         <MenubarContent>
-          <MenubarItem><Link href="/profile">Profile</Link></MenubarItem>
+          <MenubarItem><Link href="/profile" className="w-full">Profile</Link></MenubarItem>
           <MenubarSeparator />
-          <MenubarItem><Link href="/about">About</Link></MenubarItem>
+          <MenubarItem><Link href="/about" className="w-full">About</Link></MenubarItem>
           <MenubarSeparator />
           <MenubarItem><SignOutBtn/></MenubarItem>
           <MenubarSeparator />

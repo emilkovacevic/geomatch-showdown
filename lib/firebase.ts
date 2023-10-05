@@ -8,11 +8,11 @@ import { initializeApp } from 'firebase/app'
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_KEY,
-  authDomain: 'fir-666da.firebaseapp.com',
-  projectId: 'fir-666da',
-  storageBucket: 'fir-666da.appspot.com',
-  messagingSenderId: '1079944995558',
-  appId: '1:1079944995558:web:669e9f21cc8beffcbb5127',
+  authDomain: "geoguesser-game.firebaseapp.com",
+  projectId: "geoguesser-game",
+  storageBucket: "geoguesser-game.appspot.com",
+  messagingSenderId: "291637018947",
+  appId: "1:291637018947:web:82ded6ab5221c9c8276ff6"
 }
 
 // Initialize Firebase

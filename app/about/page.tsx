@@ -1,6 +1,8 @@
 const page = () => {
   return (
-    <main>about</main>
+    <main
+    className="grow"
+    >about</main>
   )
 }
 

@@ -8,20 +8,12 @@ import { z } from "zod";
 import { Separator } from "@/components/ui/separator";
 import Input from "@/components/Input";
 import axiosInstance from "@/axios/instance";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { app } from "@/lib/firebase";
 import { useToast } from "@/components/ui/use-toast";
 
 interface RegisterData {
   name: string;
-  image: File | null;
   email: string;
   password: string;
   confirmPassword: string;
@@ -42,7 +34,6 @@ const schema = z.object({
 const Register = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const storage = getStorage(app);
   const { toast } = useToast();
 
   const {
@@ -52,51 +43,14 @@ const Register = () => {
     formState: { errors },
   } = useForm<RegisterData>({ resolver: zodResolver(schema) });
 
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    setValue("image", file);
-  };
-
   const onSubmit: SubmitHandler<RegisterData> = async (data) => {
     try {
-      if (data?.image instanceof File) {
-        const storageRef = ref(storage, `profile-images/${data.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, data.image);
-
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            toast({
-              title: "Image Upload",
-              description: `Upload is ${progress}% done`,
-            });
-          },
-          (error) => {
-            console.error("Error uploading image: ", error);
-            toast({
-              title: "Error uploading image",
-              description: `Failed to upload the image, try using another image.`,
-            });
-          },
-          async () => {
-            const downloadURL = await getDownloadURL(storageRef);
-            setImageUrl(downloadURL);
-            await axiosInstance.post("/api/register", { ...data, imageUrl });
-            router.push("/signin");
-          }
-        );
-      } else {
-        await axiosInstance.post("/api/register", data);
-        toast({
-            title: "Account created",
-            description: `Please sign in`,
-          });
-        router.push("/signin");
-      }
+      await axiosInstance.post("/api/register", data);
+      toast({
+        title: "Account created",
+        description: `Please sign in`,
+      });
+      router.push("/signin");
     } catch (error: any) {
       toast({
         title: "Error",
@@ -136,14 +90,6 @@ const Register = () => {
               name="name"
               control={control}
               defaultValue=""
-            />
-          </div>
-          <div className="mb-4">
-            <input
-              type="file"
-              id="file"
-              accept="image/*"
-              onChange={onImageChange}
             />
           </div>
 
