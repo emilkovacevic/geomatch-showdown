@@ -2,7 +2,7 @@ export function formatTime(seconds: number) {
   const days = Math.floor(seconds / (60 * 60 * 24));
   const hours = Math.floor((seconds % (60 * 60 * 24)) / (60 * 60));
   const minutes = Math.floor((seconds % (60 * 60)) / 60);
-  const remainingSeconds = (seconds % 60).toFixed(3);
+  const remainingSeconds = (seconds % 60).toFixed(2);
 
   let formattedTime = "";
 

@@ -69,7 +69,6 @@ const useGameState = create<GameState & GameActions>()(
       setIsMatched: (isMatched) => set({ isMatched }), 
       setIsSelected: (isSelected) => set({ isSelected }),
       setMatchedPairs: (isSelectedPair) => set({ isSelectedPair }), 
-
     }),
     {
       name: 'global',

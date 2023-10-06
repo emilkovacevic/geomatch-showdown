@@ -11,16 +11,22 @@ export interface CardProps {
 }
 
   const Card = ({ country, capital, isMatched, isSelected, onClick }: CardProps) => {
-  let cardClass = "card";
+  let cardClass = "h-20";
 
   if (isMatched) {
-    cardClass += " matched";
+    cardClass += " bg-green-500";
   } else if (isSelected) {
-    cardClass += " selected";
+    cardClass += " bg-yelllow-500";
+  }
+
+  const handleClick = () => {
+
   }
 
   return (
-    <Button variant={"game_option"} className="h-20">
+    <Button 
+    onClick={handleClick}
+    variant={"game_option"} className={`${cardClass}`}>
       {isMatched || isSelected ? capital : country}
     </Button>
   );

@@ -38,7 +38,7 @@ const RestartGameDialog = ({
 
   return (
     <AlertDialog open={restartAlert}>
-      <AlertDialogTrigger className="mb-6">
+      <AlertDialogTrigger className="mb-16 md:mb-6">
         <Button
         variant={"game_option"}
         onClick={() => setRestartAlert(true)}>Restart</Button>
