@@ -2,18 +2,26 @@
 
 import { Button } from "./ui/button";
 
-interface CardProps {
-    country: string;
-    capital: string;
+export interface CardProps {
+  country: string;
+  capital: string;
+  isMatched: boolean;
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+  const Card = ({ country, capital, isMatched, isSelected, onClick }: CardProps) => {
+  let cardClass = "card";
+
+  if (isMatched) {
+    cardClass += " matched";
+  } else if (isSelected) {
+    cardClass += " selected";
   }
 
-  const Card: React.FC<CardProps> = ({ country, capital }) => {
   return (
     <Button variant={"game_option"} className="h-20">
-      <div>
-        <div>{country}</div>
-        <div>{capital}</div>
-      </div>
+      {isMatched || isSelected ? capital : country}
     </Button>
   );
 };

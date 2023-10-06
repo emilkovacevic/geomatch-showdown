@@ -1,26 +1,36 @@
 import { WORLD_DATA } from "@/data/world";
+import Card, { CardProps } from "@/components/GameCard";
+import useGameState from "@/store/game-store";
 
-import Title from "@/components/ui/Title";
-import Card from "@/components/GameCard";
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray;
+}
 
 const GameBoard = () => {
-  const countriesList = WORLD_DATA.slice(0, 16);
+  // seectedCards
+  const { selectedCards, isMatched, isSelectedPair, setIsMatched, gameTimer, setGameOver, setGameTimer, penalty, setGamePenaltyTime, country, capital } = useGameState()
 
   return (
-    <>
-      <section className="w-full p-4 my-4 text-left shadow bg-accent">
-        <Title title={"Time: 0s"} />
-      </section>
-      <section className="grid grid-cols-4 gap-2 lg:gap-4">
-        {countriesList.map((country) => (
-          <Card
-            key={country.country}
-            country={country.country}
-            capital={country.capital}
-          />
-        ))}
-      </section>
-    </>
+    <section className="grid grid-cols-4 gap-2 lg:gap-4">
+      {WORLD_DATA.map((card) => (
+        <Card
+          key={card.capital}
+          country={card.country}
+          capital={card.capital}
+          isMatched={isSelectedPair.includes(card.capital)}
+          isSelected={selectedCards.some(
+            (selectedCard) => selectedCard.country === card.country && selectedCard.capital === card.capital
+          )}
+          onClick={()=>{}}
+          // onClick={() => handleCardClick(card.country, card.capital)}
+        />
+      ))}
+    </section>
   );
 };
 
