@@ -117,7 +117,7 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
   return (
     <div>
       {isSetEdit ? (
-        <section className="absolute top-0 left-0 z-50 grid items-center justify-center w-full min-h-screen bg-black/50 ">
+        <section className="absolute top-0 left-0 z-50 grid items-center justify-center w-full min-h-screen bg-black/50">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="relative p-4 space-y-4 shadow rounded-xl w-fit bg-card text-foreground"
@@ -218,3 +218,21 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
 };
 
 export default EditProfile;
+
+
+// {
+//   "gameStarted": true,
+//   "gamePaused": false,
+//   "timesPaused": 1,
+//   "gameOver": false,
+//   "gamePenaltyTime": 0,
+//   "gameTimer": 65.40000000000056,
+//   "penalty": 5,
+//   "selectedCards": [],
+//   "country": "",
+//   "capital": "",
+//   "isMatched": false,
+//   "isSelected": false,
+//   "matchedPairs": [],
+//   "isSelectedPair": []
+// }
