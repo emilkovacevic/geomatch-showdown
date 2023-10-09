@@ -23,7 +23,7 @@ const RestartGameDialog = ({
   setRestartAlert,
   setLocalTimer,
 }: RestartGameDialogProps) => {
-  const { setGameTimer, setGameStarted, setGamePaused, setTimesPaused } =
+  const { setGameTimer, setGameStarted, togglePauseGame, setTimesPaused } =
     useGameState();
 
   const restartGame = () => {
@@ -31,7 +31,7 @@ const RestartGameDialog = ({
     setGameTimer(0);
     setGameStarted(false)
     setTimesPaused(0);
-    setGamePaused(false);
+    togglePauseGame();
     setRestartAlert(false);
     setLocalTimer(0);
   };

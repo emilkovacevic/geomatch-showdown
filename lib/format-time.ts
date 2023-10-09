@@ -6,6 +6,9 @@ export function formatTime(seconds: number) {
 
   let formattedTime = "";
 
+  if (seconds === 0) {
+    return (formattedTime += 'Not played');
+  }
   if (days > 0) {
     formattedTime += `${days} day${days > 1 ? "s" : ""} `;
   }
@@ -23,4 +26,13 @@ export function formatTime(seconds: number) {
   }`;
 
   return formattedTime.trim();
+}
+
+export function formatDate(date: string): string {
+  const formattedDate = new Date(date);
+  const day = String(formattedDate.getDate()).padStart(2, '0');
+  const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+  const year = String(formattedDate.getFullYear());
+  
+  return `${day}/${month}/${year}`;
 }

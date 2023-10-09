@@ -7,27 +7,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate } from "@/lib/format-iso-date";
-import { formatTime } from "@/lib/format-time";
+import { formatDate, formatTime } from "@/lib/format-time";
+import { Player } from "./LeaderBoard";
 
 interface DataTableProps {
-  players: {
-    id: number;
-    name: string;
-    time: number;
-    date: string;
-  }[];
-  placementNumbers: {
-    [playerId: number]: number;
-  };
+  players: Player[];
 }
 
-export const DataTable: React.FC<DataTableProps> = ({
+const DataTable: React.FC<DataTableProps> = ({
   players,
-  placementNumbers,
 }) => {
 
+  const sortedPlayers = [...players].sort((a, b) => {
+    if (a.score !== b.score) {
+      // Sort by score in descending order (higher score first)
+      return b.score - a.score;
+    } else {
+      // If scores are equal, sort by updatedAt in descending order (newer updatedAt first)
+      return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    }
+  });
 
+  let currentRank = 1;
+  
   return (
     <Table>
       <TableHeader>
@@ -39,15 +41,22 @@ export const DataTable: React.FC<DataTableProps> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {players.map((player) => (
-          <TableRow key={player.id}>
-            <TableCell>{placementNumbers[player.id]}</TableCell>
-            <TableCell>{player.name}</TableCell>
-            <TableCell>{formatTime(player.time)}</TableCell>
-            <TableCell>{formatDate(player.date)}</TableCell>
-          </TableRow>
-        ))}
+      {sortedPlayers.map((player) => {
+          const place = currentRank;
+          currentRank++;
+
+          return (
+            <TableRow key={player.id}>
+              <TableCell>{place}</TableCell>
+              <TableCell>{player.name}</TableCell>
+              <TableCell>{formatTime(player.score ? player.score : 0)}</TableCell>
+              <TableCell>{formatDate(player.updatedAt)}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );
 };
+
+export default DataTable;

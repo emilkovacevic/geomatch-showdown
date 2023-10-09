@@ -1,5 +1,6 @@
 // Function to generate a random date between July 1, 2023, and September 30, 2023
 const fs = require("fs");
+
 const PLAYERS = []
   function getRandomDate() {
     const startDate = new Date("2023-07-01T00:00:00.000Z").getTime();

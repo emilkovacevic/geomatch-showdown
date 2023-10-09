@@ -1,77 +1,53 @@
-import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface GameState {
   gameStarted: boolean;
-  gamePaused: boolean;
   gameOver: boolean;
-  gamePenaltyTime: number;
-  timesPaused: number;
   gameTimer: number;
-  selectedCards: {country: string, capital: string}[];
-  penalty: number;
-  country: string;
-  capital: string;
-  isMatched: boolean;
-  isSelected: boolean;
-  matchedPairs: string[];
-  isSelectedPair: string[]; 
+  redTimer: boolean,
+  timesPaused: number;
+  gamePenaltyTime: number;
+  paused: boolean;
 }
 
 type GameActions = {
   setGameStarted: (gameStarted: boolean) => void;
-  setGamePaused: (gamePaused: boolean) => void;
   setGameOver: (gameOver: boolean) => void;
-  setGamePenaltyTime: (penaltyTime: number) => void;
-  setGameTimer:(timer: number) =>void;
+  setRedTimer: (redTimer: boolean) => void;
+
+  setGamePenaltyTime: (gamePenaltyTime: number) => void;
+  setGameTimer: (timer: number) => void;
   setTimesPaused: (timesPaused: number) => void;
-  setCountry: (country: string) => void;
-  setCapital: (capital: string) => void;
-  setIsMatched: (isMatched: boolean) => void;
-  setIsSelected: (isSelected: boolean) => void;
-  setMatchedPairs: (matchPaired: string[]) => void
+  togglePauseGame: () => void;
 };
 
 const initialState: GameState = {
-      gameStarted: false,
-      gamePaused: false,
-      timesPaused: 0,
-      gameOver: false,
-      gamePenaltyTime: 0,
-      gameTimer: 0,
-      penalty: 5,
-
-
-      selectedCards: [],
-      country: '',
-      capital: '', 
-      isMatched: false,
-      isSelected: false,
-      matchedPairs: [],
-      isSelectedPair: [],
-}
+  gameStarted: false,
+  paused: false,
+  redTimer:false,
+  timesPaused: 0,
+  gameOver: false,
+  gameTimer: 0,
+  gamePenaltyTime: 5,
+};
 
 const useGameState = create<GameState & GameActions>()(
-
   persist(
     (set) => ({
       ...initialState,
-    
-      setGameStarted: (gameStarted) => set({ gameStarted}),
-      setGamePaused: (gamePaused) => set({ gamePaused }),
-      setGameTimer: (gameTimer) => set({gameTimer}),
+
+      setGameStarted: (gameStarted) => set({ gameStarted }),
+      setGameTimer: (gameTimer) => set({ gameTimer}),
       setGameOver: (gameOver) => set({ gameOver }),
-      setGamePenaltyTime: (penaltyTime) => set({ gamePenaltyTime: penaltyTime }), 
+      setGamePenaltyTime: (penaltyTime) =>set({ gamePenaltyTime: +penaltyTime}),
       setTimesPaused: (timesPaused) => set({ timesPaused }),
-    
-      setCountry: (country) => set({ country }), 
-      setCapital: (capital) => set({ capital }),
-      setIsMatched: (isMatched) => set({ isMatched }), 
-      setIsSelected: (isSelected) => set({ isSelected }),
-      setMatchedPairs: (isSelectedPair) => set({ isSelectedPair }), 
+      setRedTimer: (redTimer) => set({ redTimer }),
+      togglePauseGame: () => set((state) => ({ paused: !state.paused })),
+
     }),
     {
-      name: 'global',
+      name: "global",
       storage: createJSONStorage(() => localStorage),
     }
   )

@@ -28,6 +28,8 @@ const UserMenu = ({session}: UserMenuProps) => {
           </Avatar>
         </MenubarTrigger>
         <MenubarContent>
+          <MenubarItem><Link href="/game" className="w-full">Play</Link></MenubarItem>
+          <MenubarSeparator />
           <MenubarItem><Link href="/profile" className="w-full">Profile</Link></MenubarItem>
           <MenubarSeparator />
           <MenubarItem><Link href="/about" className="w-full">About</Link></MenubarItem>

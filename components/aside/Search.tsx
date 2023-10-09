@@ -20,7 +20,7 @@ export const Search: React.FC<SearchProps> = ({ handleSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center my-2 space-x-4">
+    <form onSubmit={handleSubmit} className="flex items-center my-2 mr-2 space-x-4">
       <Input
         type="text"
         placeholder="Search by name..."

@@ -26,7 +26,6 @@ const schema = z.object({
 
 const SignIn = () => {
   const { data: session } = useSession();
-  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -37,7 +36,6 @@ const SignIn = () => {
 
   const onSubmit: SubmitHandler<LoginData> = async (data) => {
     try {
-      console.log(data)
       const response = await signIn("credentials", {
         ...data,
         redirect: false,

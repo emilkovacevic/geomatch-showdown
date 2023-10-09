@@ -1,3 +1,6 @@
+// Pagination.tsx
+import React from "react";
+
 interface PaginationProps {
   playersPerPage: number;
   totalPlayers: number;
@@ -5,7 +8,7 @@ interface PaginationProps {
   paginate: (pageNumber: number) => void;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({
+const Pagination: React.FC<PaginationProps> = ({
   playersPerPage,
   totalPlayers,
   currentPage,
@@ -15,9 +18,9 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const getPageNumbers = () => {
     const pageNumbers = [];
-  
+
     const totalPages = Math.ceil(totalPlayers / playersPerPage);
-  
+
     if (totalPages <= 12) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
@@ -35,18 +38,16 @@ export const Pagination: React.FC<PaginationProps> = ({
         pageNumbers.push(i);
       }
     }
-  
-    // Ensure the first and last pages are available
+
     if (!pageNumbers.includes(1)) {
       pageNumbers.unshift(1);
     }
     if (!pageNumbers.includes(totalPages)) {
       pageNumbers.push(totalPages);
     }
-  
+
     return pageNumbers;
   };
-  
 
   const pageNumbers = getPageNumbers();
 
@@ -71,3 +72,5 @@ export const Pagination: React.FC<PaginationProps> = ({
     </nav>
   );
 };
+
+export default Pagination;

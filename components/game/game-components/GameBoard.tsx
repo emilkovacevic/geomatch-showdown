@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { shuffle } from "lodash"; // Import the shuffle function
-import WORLD_DATA from "@/data/file.json";
+import { shuffle } from "lodash";
+import WORLD_DATA from "@/data/file.json"; 
+import useGameState from "@/store/game-store";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/components/ui/use-toast";
+import axiosInstance from "@/axios/instance";
+import { Button } from "@/components/ui/button";
 
 interface Country {
   id: number;
   name: string;
 }
 
-const GameBoard = () => {
+interface GameBoardProps {
+  elapsedTime: number;
+}
+
+const GameBoard = ({ elapsedTime }: GameBoardProps) => {
+  const session = useSession();
+  const { setGameTimer, setGameOver, setGamePenaltyTime, gameOver, setRedTimer } = useGameState();
+  const { toast } = useToast();
+
   const countries: Country[] = WORLD_DATA.map((entry) => ({
     id: entry.id,
     name: entry.country,
@@ -18,12 +31,14 @@ const GameBoard = () => {
     name: entry.capital,
   }));
 
-  const [usedCardIds, setUsedCardIds] = useState<number[]>([]); // Track used card IDs
+  const [usedCardIds, setUsedCardIds] = useState<number[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<Country[]>([]);
   const [selectedCapitals, setSelectedCapitals] = useState<Country[]>([]);
 
-  const initialCards: Country[] = shuffle([...selectedCountries, ...selectedCapitals]);
-
+  const initialCards: Country[] = shuffle([
+    ...selectedCountries,
+    ...selectedCapitals,
+  ]);
   const [cards, setCards] = useState<Country[]>(initialCards);
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [matchedPairs, setMatchedPairs] = useState<number[]>([]);
@@ -31,13 +46,7 @@ const GameBoard = () => {
   const [disableSelection, setDisableSelection] = useState(false);
 
   useEffect(() => {
-    // Shuffle the cards when the component mounts
-    setCards(shuffle(cards));
-  }, []);
-
-  useEffect(() => {
-    // Check if there are 6 or fewer cards left
-    if (cards.length <=0  && usedCardIds.length < countries.length) {
+    if (cards.length <= 0 && usedCardIds.length < countries.length * 2) {
       const unusedCountries = countries.filter(
         (country) => !usedCardIds.includes(country.id)
       );
@@ -60,12 +69,48 @@ const GameBoard = () => {
       ];
 
       setUsedCardIds(newUsedCardIds);
-
-      // Refill the cards with new and unused cards
-      const newCards: Country[] = shuffle([...newCountryCards, ...newCapitalCards]);
+      const newCards: Country[] = shuffle([
+        ...newCountryCards,
+        ...newCapitalCards,
+      ]);
       setCards(newCards);
     }
   }, [cards, usedCardIds, countries, capitals]);
+
+  useEffect(() => {
+    if (matchedPairs.length === countries.length) {
+      setGameOver(true);
+      setGameTimer(elapsedTime);
+      if (session.status === 'authenticated') {
+        if(!session.data.user.email){
+          toast({
+            title: 'Something went wrong',
+            description: `You are logged in but have incomplete data.`,
+          });
+        }
+        const postScore = async () => {
+          try {
+            await axiosInstance.patch('/api/update-score', {
+              email: session.data.user.email,
+              score: elapsedTime,
+            });
+            toast({
+              title: 'New score added',
+              description: `Score uploaded successfully.`,
+            });
+          } catch (error) {
+            toast({
+              title: 'Failed to upload score',
+              description: `Failed to upload the score to your account.`,
+            });
+          }
+        };
+
+        postScore();
+      }
+    }
+  }, [matchedPairs, setGameTimer, elapsedTime, setGameOver, session.status, countries.length, toast, session?.data?.user.email]);
+  
 
   const handleCardClick = (index: number) => {
     if (disableSelection) return;
@@ -95,31 +140,38 @@ const GameBoard = () => {
         setMatchedPairs([...matchedPairs, firstCard.id]);
         setSelectedCards([]);
 
-        // Remove the matched pair from the cards list after 1 second
+        // Remove the matched pair from the cards list after 0.2 second
         setTimeout(() => {
           const updatedCards = cards.filter(
             (_, i) => i !== firstIndex && i !== secondIndex
           );
           setCards(updatedCards);
-        }, 1000);
+        }, 200);
       } else {
-        // If not matched, turn them red and reset the selection after 4 seconds
+        // If not matched, turn them red and reset the selection after 5 seconds
         setWrongPairs([firstIndex, secondIndex]);
         setDisableSelection(true);
+        setGamePenaltyTime(5)
+        setRedTimer(true)
         setTimeout(() => {
           setWrongPairs([]);
           setSelectedCards([]);
           setDisableSelection(false);
-        }, 4000);
+          setRedTimer(false)
+        }, 5000);
       }
     }
   };
 
   return (
-    <section className="grid grid-cols-2 gap-2 md:grid-cols-6 lg:gap-4 grow">
+    <section >
+      {gameOver && <h2>End is Reached</h2>}
+      <div
+      className="grid items-center h-full grid-cols-2 gap-2 mt-10 md:grid-cols-6 lg:gap-4"
+      >
       {cards.map((card, index) => (
-        <button
-          className="p-2 font-bold shadow bg-card"
+        <Button
+          className="px-2 py-4 font-bold shadow bg-card hover:border focus:border text-foreground"
           key={index}
           onClick={() => handleCardClick(index)}
           style={{
@@ -141,8 +193,9 @@ const GameBoard = () => {
           }}
         >
           {card.name}
-        </button>
+        </Button>
       ))}
+      </div>
     </section>
   );
 };

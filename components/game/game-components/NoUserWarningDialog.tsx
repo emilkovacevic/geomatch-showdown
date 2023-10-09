@@ -40,7 +40,7 @@ const NoUserWarning = ({
               router.push("/signin");
             }}
           >
-            Create an Account
+            Sign In
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

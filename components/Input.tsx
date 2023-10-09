@@ -2,7 +2,7 @@ interface InputProps {
   type: string;
   value?: string | File | null;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  name?: string; // Make name property optional
+  name?: string;
   id: string;
   placeholder?: string;
   onBlur?: () => void;
@@ -42,7 +42,7 @@ const Input = ({
         id={id}
         type={type}
         onChange={onChange}
-        value={value as string} // Cast value to string
+        value={value as string}
         name={name}
         placeholder={placeholder}
         onBlur={onBlur}

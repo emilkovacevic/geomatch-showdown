@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,12 +14,13 @@ import { app } from "@/lib/firebase";
 import { useToast } from "../ui/use-toast";
 import Input from "../Input";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 interface ProfileData {
-  name: string;
-  imageUrl: string | null;
-  password: string;
-  confirmPassword: string;
+  name: string  | null | undefined;
+  imageUrl: string | null | undefined;
+  password: string  | null | undefined;
+  confirmPassword: string  | null | undefined;
 }
 
 const schema = z.object({
@@ -27,15 +28,15 @@ const schema = z.object({
   imageUrl: z.string(),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .nonempty("Password is required"),
+    .min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
 });
 
 const EditProfile = ({ user_id }: { user_id: string }) => {
   const [isSetEdit, setEditProfile] = useState(false);
+  const router = useRouter()
   const storage = getStorage(app);
-  const [file, setFile] = useState<File | null>(null); // jpeg / png
+  const [file, setFile] = useState<File | null>(null); 
   const { toast } = useToast();
   const {
     handleSubmit,
@@ -55,47 +56,48 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
   };
 
   const onSubmit: SubmitHandler<ProfileData> = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      toast({
+        title: "Password and Confirm Password do not match",
+      });
+      return; 
+    }
+  
     if (file) {
       const name = new Date().getTime() + file.name;
       const storageRef = ref(storage, name);
-
+  
       try {
         const uploadTask = uploadBytesResumable(storageRef, file);
-
+  
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload is " + progress + "% done");
-            switch (snapshot.state) {
-              case "paused":
-                console.log("Upload is paused");
-                break;
-              case "running":
-                console.log("Upload is running");
-                break;
-            }
+            // ... (existing code for upload progress)
           },
           (error) => {
             console.error("Error uploading:", error);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              // Pass the downloadURL to the REST endpoint
+              // Check if imageUrl is empty before including it
+              const requestData = {
+                ...data,
+                user_id,
+              };
+  
+              if (downloadURL) {
+                requestData.imageUrl = downloadURL;
+              }
+  
               axiosInstance
-                .post("/api/update-profile", {
-                  ...data,
-                  user_id,
-                  imageUrl: downloadURL,
-                })
+                .patch("/api/update-profile", requestData)
                 .then((response) => {
                   toast({
                     title: "Account Updated",
                   });
-                  reset
-                  setEditProfile(false)
-
+                  reset();
+                  setEditProfile(false);
                 })
                 .catch((error) => {
                   toast({
@@ -109,10 +111,42 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
         console.error("Error during upload:", error);
       }
     } else {
-      // Handle the case where no file is selected
-      console.error("No file selected for upload");
+      let requestData = {
+        ...data,
+        user_id,
+      };
+  
+      if (!requestData.imageUrl) {
+        requestData = {
+          ...requestData,
+          imageUrl: undefined,
+        };
+      }
+  
+      try {
+        axiosInstance
+          .patch("/api/update-profile", requestData)
+          .then((response) => {
+            toast({
+              title: "Account Updated",
+            });
+            reset();
+            setEditProfile(false);
+          })
+          .catch((error) => {
+            toast({
+              title: `Error updating profile: ${error}`,
+            });
+          });
+      } catch (error) {
+        toast({
+          title: `Error updating profile`,
+        });
+      }
     }
+    router.refresh();
   };
+  
   
   return (
     <div>
@@ -218,21 +252,3 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
 };
 
 export default EditProfile;
-
-
-// {
-//   "gameStarted": true,
-//   "gamePaused": false,
-//   "timesPaused": 1,
-//   "gameOver": false,
-//   "gamePenaltyTime": 0,
-//   "gameTimer": 65.40000000000056,
-//   "penalty": 5,
-//   "selectedCards": [],
-//   "country": "",
-//   "capital": "",
-//   "isMatched": false,
-//   "isSelected": false,
-//   "matchedPairs": [],
-//   "isSelectedPair": []
-// }
