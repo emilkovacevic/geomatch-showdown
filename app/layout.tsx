@@ -9,6 +9,7 @@ import AuthProvider from "@/lib/auth-provider";
 import GoogleAnalytics from "@/lib/google-analytics";
 import ClientOnly from "@/lib/client-only";
 import { Toaster } from "@/components/ui/toaster";
+import backgroundImage from "@/public/world-image.png"
 
 const inter = Noto_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -24,7 +25,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+      <body className={`${inter.className} flex flex-col min-h-screen bg-blue-400/40 dark:bg-blue-950/50 bg-no-repeat bg-cover`}
+    style={{ 
+      backgroundImage: `url(${backgroundImage.src})`,}}
+    >
         <AuthProvider>
           <ThemeProvider
             storageKey="website_theme"

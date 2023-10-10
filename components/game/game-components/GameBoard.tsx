@@ -168,13 +168,14 @@ const GameBoard = ({ elapsedTime }: GameBoardProps) => {
   
 
   return (
-    <section >
+    <section 
+    >
       <div
-      className="grid items-center h-full grid-cols-2 gap-2 mt-2 md:grid-cols-6 lg:gap-4"
+      className="grid items-center h-full grid-cols-2 gap-4 p-4 mt-2 bg-card md:grid-cols-6 lg:gap-4"
       >
       {cards.map((card, index) => (
         <Button
-          className="px-2 py-8 font-bold shadow bg-card text-foreground"
+          className="px-2 py-8 font-bold shadow bg-secondary text-accent-foreground hover:bg-accent hover:text-accent-foreground "
           key={index}
           onClick={() => handleCardClick(index)}
           style={{

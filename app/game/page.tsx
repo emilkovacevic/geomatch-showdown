@@ -146,17 +146,20 @@ const GamePage = () => {
   }
 
   return (
-    <main >
+    <main
+    >
+      
       {gameStarted ? (
-        <section className="flex flex-col">
-          <div className="sticky left-0 z-50 flex justify-between w-full pt-2 bg-background top-14 ">
-            <h1 className="text-lg  md:text-2xl">
+        <section 
+        className="flex flex-col">
+          <div className="sticky left-0 z-50 flex items-center justify-between w-full p-4 pt-2 bg-card top-14 ">
+            <h1 className="text-lg md:text-2xl">
               <span
               className={`${redTimer ? "text-red-500" : ""}`}
               >
                 {paused ? 'Game is paused' :
                 <>
-                <span>Remaining: {remainingCountries}</span> <br />
+                <span>Uncovered Remaining: {remainingCountries} Countries</span> <br />
                  <span className={`hidden md:inline-block ${redTimer ? "text-red-500" : ""}`}>Elapsed Time:{" "}
                 </span>
                 {
@@ -174,7 +177,7 @@ const GamePage = () => {
                 </span>
               ) : null}
             </h1>
-            <div className="inline-flex gap-4">
+            <div className="inline-flex items-center gap-4">
               <RestartGameDialog
                 restartAlert={restartAlert}
                 setRestartAlert={setRestartAlert}
