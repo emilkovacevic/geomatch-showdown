@@ -19,7 +19,7 @@ export interface Player {
 const LeaderBoard = () => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [playersPerPage] = useState(3);
+  const [playersPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrderTime, setSortOrderTime] = useState<"asc" | "desc">("asc");
   const [sortOrderScore, setSortOrderScore] = useState<"asc" | "desc">("asc");
