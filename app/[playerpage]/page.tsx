@@ -31,7 +31,7 @@ export default async function Page({
       <aside className="w-full lg:w-1/4">
         <div className="sticky flex flex-row gap-4 space-y-2 lg:flex-col bg-card">
           <Image
-            className="w-full h-full"
+            className="object-cover w-56 h-full mx-auto mt-4"
             width={300}
             height={300}
             alt={player.name || ""}
