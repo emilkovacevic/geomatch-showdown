@@ -21,8 +21,8 @@ const LeaderBoard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [playersPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrderTime, setSortOrderTime] = useState<"asc" | "desc">("asc");
-  const [sortOrderScore, setSortOrderScore] = useState<"asc" | "desc">("asc");
+  const [sortOrderTime, setSortOrderTime] = useState<"asc" | "desc" | undefined>(undefined);
+  const [sortOrderScore, setSortOrderScore] = useState<"asc" | "desc" | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -64,10 +64,12 @@ const LeaderBoard = () => {
 
   const handleSortByScore = () => {
     setSortOrderScore(sortOrderScore === "asc" ? "desc" : "asc");
+    setSortOrderTime(undefined);
   };
-
+  
   const handleSortByTime = () => {
     setSortOrderTime(sortOrderTime === "asc" ? "desc" : "asc");
+    setSortOrderScore(undefined);
   };
 
   return (

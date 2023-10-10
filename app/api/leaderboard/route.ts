@@ -6,8 +6,8 @@ interface RequestBody {
     page?: number;
     perPage?: number;
     searchTerm?: string;
-    sortOrderTime?: "asc" | "desc";
-    sortOrderScore?: "asc" | "desc";
+    sortOrderTime?: "asc" | "desc" | undefined;
+    sortOrderScore?: "asc" | "desc" | undefined;
   };
 }
 
@@ -18,8 +18,8 @@ export async function POST(request: Request) {
       page = 1,
       perPage = 10,
       searchTerm = "",
-      sortOrderTime ="asc",
-      sortOrderScore = "asc",
+      sortOrderTime,
+      sortOrderScore,
     } = body.data;
 
     const userCount = await prisma.user.count({ 
