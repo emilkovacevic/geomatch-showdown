@@ -1,75 +1,62 @@
-// Pagination.tsx
 import React from "react";
+import { Button } from "../ui/button";
 
 interface PaginationProps {
-  playersPerPage: number;
-  totalPlayers: number;
   currentPage: number;
-  paginate: (pageNumber: number) => void;
+  totalPages: number;
+  onPageChange: (newPage: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
-  playersPerPage,
-  totalPlayers,
   currentPage,
-  paginate,
+  totalPages,
+  onPageChange,
 }) => {
-  const totalPages = Math.ceil(totalPlayers / playersPerPage);
+  const canGoPrevious = currentPage > 1;
+  const canGoNext = currentPage < totalPages;
 
-  const getPageNumbers = () => {
-    const pageNumbers = [];
-
-    const totalPages = Math.ceil(totalPlayers / playersPerPage);
-
-    if (totalPages <= 12) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-      }
-    } else if (currentPage <= 6) {
-      for (let i = 1; i <= 12; i++) {
-        pageNumbers.push(i);
-      }
-    } else if (currentPage >= totalPages - 6) {
-      for (let i = totalPages - 11; i <= totalPages; i++) {
-        pageNumbers.push(i);
-      }
-    } else {
-      for (let i = currentPage - 5; i <= currentPage + 6; i++) {
-        pageNumbers.push(i);
-      }
-    }
-
-    if (!pageNumbers.includes(1)) {
-      pageNumbers.unshift(1);
-    }
-    if (!pageNumbers.includes(totalPages)) {
-      pageNumbers.push(totalPages);
-    }
-
-    return pageNumbers;
+  const handlePageChange = (newPage: number) => {
+    onPageChange(newPage);
   };
 
-  const pageNumbers = getPageNumbers();
-
   return (
-    <nav>
-      <ul className="flex flex-wrap gap-4">
-        {pageNumbers.map((number) => (
-          <li
-            key={number}
-            className={`px-2 py-1 rounded-lg ${
-              currentPage === number
-                ? "border text-accent"
-                : "bg-secondary text-primary-foreground"
-            }`}
-          >
-            <button onClick={() => paginate(number)} className="page-link">
-              {number}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div className="inline-flex gap-2 mt-4">
+      <Button
+        variant={"game_option"}
+        className="rounded"
+        disabled={!canGoPrevious}
+        onClick={() => handlePageChange(1)}
+      >
+        First
+      </Button>
+      <Button
+        variant={"game_option"}
+        className="rounded"
+        disabled={!canGoPrevious}
+        onClick={() => handlePageChange(currentPage - 1)}
+      >
+        Previous
+      </Button>
+      <span className="mx-4">
+        Page {currentPage} of {totalPages}
+      </span>
+      <Button
+        variant={"game_option"}
+        className="rounded"
+        disabled={!canGoNext}
+        onClick={() => handlePageChange(currentPage + 1)}
+      >
+        Next
+      </Button>
+      <Button
+        variant={"game_option"}
+        className="rounded"
+        disabled={!canGoNext}
+        onClick={() => handlePageChange(totalPages)}
+      >
+        Last
+      </Button>
+    </div>
   );
 };
 

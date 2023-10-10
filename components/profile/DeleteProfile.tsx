@@ -45,7 +45,7 @@ const DeleteProfile = ({ user_id }: DeleteProfileProps) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger><Button variant={"destructive"}>Delete</Button></AlertDialogTrigger>
+      <AlertDialogTrigger><Button variant={"destructive"}>Delete Account</Button></AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

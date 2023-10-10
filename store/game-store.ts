@@ -9,12 +9,14 @@ interface GameState {
   timesPaused: number;
   gamePenaltyTime: number;
   paused: boolean;
+  remainingCountries: number
 }
 
 type GameActions = {
   setGameStarted: (gameStarted: boolean) => void;
   setGameOver: (gameOver: boolean) => void;
   setRedTimer: (redTimer: boolean) => void;
+  setRemainingCountries: (remainingCountries: number) => void;
 
   setGamePenaltyTime: (gamePenaltyTime: number) => void;
   setGameTimer: (timer: number) => void;
@@ -25,6 +27,7 @@ type GameActions = {
 const initialState: GameState = {
   gameStarted: false,
   paused: false,
+  remainingCountries: 0,
   redTimer:false,
   timesPaused: 0,
   gameOver: false,
@@ -43,8 +46,8 @@ const useGameState = create<GameState & GameActions>()(
       setGamePenaltyTime: (penaltyTime) =>set({ gamePenaltyTime: +penaltyTime}),
       setTimesPaused: (timesPaused) => set({ timesPaused }),
       setRedTimer: (redTimer) => set({ redTimer }),
-      togglePauseGame: () => set((state) => ({ paused: !state.paused })),
-
+      togglePauseGame: () => set((pause) => ({ paused: !pause.paused })),
+      setRemainingCountries: (remainingCountries) => set({ remainingCountries }),
     }),
     {
       name: "global",

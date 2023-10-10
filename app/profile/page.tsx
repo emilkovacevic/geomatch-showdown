@@ -20,7 +20,7 @@ import {
 const page = async () => {
   const session = await getServerSession();
   if (!session?.user.email) redirect("/");
-  const user = await prisma.user.findUnique({
+  const player = await prisma.user.findUnique({
     where: {
       email: session?.user.email,
     },
@@ -28,88 +28,70 @@ const page = async () => {
       scoreList: true,
     },
   });
-  if (!user)
+  if (!player)
     return (
-      <main className="container p-4 m-auto grow">
-        <h1 className="text-xl font-semibold">User not found</h1>
+      <main className="p-4 m-auto grow">
+        <h1 className="text-xl font-semibold">Player not found</h1>
       </main>
     );
   return (
-    <main className="container my-10 overflow-hidden shadow-xl grow">
-      <div className="flex flex-wrap justify-center gap-4">
-        <div className="py-4 overflow-hidden rounded-lg bg-card">
-          
-            <Image
-              src={user?.image || "/person.jpg"}
-              alt={user?.name || "user"}
-              width={180}
-              height={180}
-              className="object-cover m-auto"
-            />
-        
-          <div className="px-6 py-4 text-card-foreground bg-card">
-            <h3 className="text-xl font-semibold">
-              Player Profile Information
-            </h3>
-            <ul className="mt-4 space-y-6">
-              <li className="flex items-center justify-between pt-4 border-t border-gray-300">
-                <span>Name:</span>
-                <span>{user?.name}</span>
-              </li>
-              <li className="flex items-center justify-between pt-4 border-t border-gray-300">
-                <span>Email:</span>
-                <span>{user?.email}</span>
-              </li>
-              <li className="flex items-center justify-between pt-4 border-t border-gray-300">
-                <span>Top Score:</span>
-                <span>{formatTime(user.score)}</span>
-              </li>
-              <li className="flex items-center justify-between pt-4 border-t border-gray-300">
-                <span>Last update:</span>
-                <span>
-                  {user?.updatedAt
-                    ? formatDate(user?.updatedAt.toISOString())
-                    : "NAN"}
-                </span>
-              </li>
-              <li className="flex items-center justify-between pt-4 border-t border-gray-300">
-                <span>Member Since:</span>
-                <span>
-                  {user?.createdAt
-                    ? formatDate(user?.createdAt.toISOString())
-                    : "NAN"}
-                </span>
-              </li>
-            </ul>
-          </div>
-          <div className="flex justify-between p-5 bg-card">
-            <EditProfile user_id={user.id} />
-            <DeleteProfile user_id={user.id} />
-          </div>
+    <div className="container flex flex-wrap justify-center h-full gap-4 my-8">
+      {/* Sidebar */}
+      <aside className="sticky left-0 w-full h-fit bg-card lg:w-1/4 top-10">
+        <div className="flex flex-row gap-4 space-y-2 lg:flex-col">
+          <Image
+            className="w-full h-full"
+            width={300}
+            height={300}
+            alt={player.name || ""}
+            src={player.image || "/person.jpg"}
+          />
+          <section className="px-4 pb-4">
+            <h1 className="mb-4 text-3xl font-bold">{player.name}</h1>
+            <h2 className="my-2 text-lg font-semibold">
+              Best Score {formatTime(player.score)}
+            </h2>
+            <div>Date: {formatDate(player.updatedAt.toISOString())}</div>
+          </section>
         </div>
-        <aside className="p-4 bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Your time</TableHead>
-                <TableHead>Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody >    
-                {user.scoreList.map((score) => (
-                  <TableRow key={score.id}>
-                    <TableCell>{formatTime(score.score)}</TableCell>
-                    <TableCell className="text-right">
-                      {formatDate(score.createdAt.toISOString())}
-                    </TableCell>
+        <section className="flex justify-between p-4">
+          <EditProfile user_id={player.id} />
+          <DeleteProfile user_id={player.id} />
+        </section>
+      </aside>
+      {/* Main content */}
+      <main className="flex-1 w-full p-4 mt-2 lg:mt-0 lg:w-3/4 bg-card">
+        <section>
+          <ScrollArea>
+            <div className="p-4">
+              <h4 className="mb-4 text-sm font-medium leading-none">
+                Score list
+              </h4>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Your time</TableHead>
+                    <TableHead className="text-right">Date</TableHead>
                   </TableRow>
+                </TableHeader>
+                {player.scoreList.map((score) => (
+                  <TableBody key={score.id}>
+                    <TableRow
+                    className="cursor-pointer hover:bg-black/50"
+                    >
+                      <TableCell>{formatTime(score.score)}</TableCell>
+                      <TableCell className="text-right">
+                        {formatDate(score.createdAt.toISOString())}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
                 ))}
-    
-            </TableBody>
-          </Table>
-        </aside>
-      </div>
-    </main>
+              </Table>
+            </div>
+          </ScrollArea>
+        </section>
+      </main>
+    </div>
   );
 };
 

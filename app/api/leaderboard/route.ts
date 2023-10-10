@@ -1,18 +1,35 @@
 import prisma from "@/lib/prisma";
-import { User } from "@prisma/client";
 import { NextResponse } from "next/server";
+
+interface RequestBody {
+  data: {
+    page?: number;
+    perPage?: number;
+    searchTerm?: string;
+    sortOrderTime?: "asc" | "desc";
+    sortOrderScore?: "asc" | "desc";
+  };
+}
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body: RequestBody = await request.json();
     const {
       page = 1,
       perPage = 10,
       searchTerm = "",
-      sortOrderTime = "asc",
-      sortOrderScore = "asc"
+      sortOrderTime ="asc",
+      sortOrderScore = "asc",
     } = body.data;
 
+    const userCount = await prisma.user.count({ 
+      where: {
+        name: {
+          contains: searchTerm,
+          mode: "insensitive",
+        },
+      },
+    });
 
     const userAccount = await prisma.user.findMany({
       orderBy: [
@@ -21,14 +38,14 @@ export async function POST(request: Request) {
         },
         {
           updatedAt: sortOrderTime,
-        }
+        },
       ],
       where: {
         name: {
-            contains: searchTerm,
-            mode: 'insensitive',
+          contains: searchTerm,
+          mode: "insensitive",
+        },
       },
-    },
       skip: (page - 1) * perPage,
       take: perPage,
       select: {
@@ -40,14 +57,17 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(userAccount);
+    // Set the x-total-count header with the total count of users
+    const headers = {
+      "x-total-count": userCount.toString(),
+    };
 
-} catch (error) {
+    return NextResponse.json(userAccount, { headers });
+  } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );
   }
-  
 }

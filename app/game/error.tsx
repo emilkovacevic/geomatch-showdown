@@ -13,7 +13,7 @@ export default function Error({
 
  
   return (
-    <div className="flex flex-col justify-center text-center align-middle grow">
+    <div className="flex flex-col justify-center text-center align-middle">
       <h2
       className="text-lg "
       >Something went wrong!</h2>

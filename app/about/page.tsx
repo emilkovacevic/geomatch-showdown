@@ -2,7 +2,7 @@ import ContactForm from "@/components/about/ContactForm";
 
 const page = () => {
   return (
-    <main className="p-4 grow">
+    <main className="p-4">
       <section className="container p-6 mb-10 rounded shadow-md bg-card">
         <h1 className="mb-4 text-3xl font-semibold text-accent">About</h1>
         <p className="text-foreground">

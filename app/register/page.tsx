@@ -66,7 +66,7 @@ const Register = () => {
   }, [session, router]);
 
   return (
-    <main className="flex items-center justify-center my-10 text-center grow">
+    <main className="flex items-center justify-center my-10 text-center">
       <div className="w-full px-8 pt-6 pb-8 mb-4 rounded shadow-md bg-card text-foreground md:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1 className="mb-4">Register</h1>

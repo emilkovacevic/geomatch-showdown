@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-4 mx-auto my-6 grow">
+    <div className="flex flex-col gap-4 mx-auto my-6">
       <header className="p-10 mb-4 text-center bg-card">
         <h1 className="text-3xl font-semibold text-accent">
           Geomatch Showdown
@@ -14,15 +14,14 @@ export default function Home() {
           Find the country-capital pairs!
         </p>
       </header>
-      <main className="p-4 shadow-md bg-card">
-        <div className="flex flex-wrap items-center ">
+      <main className="gap-2 p-4 shadow-md sm:flex bg-card">
           <GameStartMenu />
           <div
-          className="relative mx-auto border rounded"
+          className="relative mx-auto "
           >
             <Image
               priority
-              className="object-fill w-full h-full my-auto bg-transparent rounded"
+              className="object-cover w-full h-full my-auto bg-transparent rounded"
               src="/world-image.png"
               alt="world cover image"
               width={800}
@@ -37,7 +36,6 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </div>
       </main>
       <aside>
         <LeaderBoard />

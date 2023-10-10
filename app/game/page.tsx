@@ -24,27 +24,17 @@ const GamePage = () => {
     timesPaused,
     paused,
     redTimer,
+    remainingCountries,
     setRedTimer,
     setGameStarted,
     togglePauseGame,
     setTimesPaused,
-
     setGameTimer,
     setGameOver,
   } = useGameState();
 
   const [timer, setLocalTimer] = useState<number>(0);
   const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
-
-  // reset game state on refresh
-  useEffect(() => {
-    setGameStarted(false);
-    setTimesPaused(0);
-    setGameOver(false);
-    setGameTimer(0);
-    setRedTimer(false);
-    setIsLoaded(true);
-  }, []);
 
   const resetGame = () => {
     setGameStarted(false);
@@ -57,13 +47,29 @@ const GamePage = () => {
 
   const startGame = () => {
     setGameStarted(true);
-    setGameOver(false);
+    setLocalTimer(0)
+    if(paused){
+      togglePauseGame()
+    }
     setLastTimestamp(performance.now());
   };
 
   const handleTogglePauseGame = () => {
-    togglePauseGame();
+    if(timesPaused === 0 ){
+      setTimesPaused(1)
+      togglePauseGame()
+    }
+    if(paused){
+      togglePauseGame()
+    }
   };
+
+    // reset game state on refresh
+    useEffect(() => {
+      resetGame()
+      
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
   useEffect(() => {
     let requestId: number | null = null;
@@ -97,11 +103,11 @@ const GamePage = () => {
         cancelAnimationFrame(requestId);
       }
     };
-  }, [gameStarted, gameOver, lastTimestamp, paused]);
+  }, [gameStarted, gameOver, lastTimestamp, paused, remainingCountries, setLocalTimer]);
 
   if (!isLoaded) {
     return (
-      <div className="container relative flex flex-col justify-center h-full my-8 text-center grow">
+      <div className="relative flex flex-col justify-center h-full my-8 text-center grow">
         <h1 className="text-xl">Loading...</h1>
       </div>
     );
@@ -109,7 +115,7 @@ const GamePage = () => {
 
   if (gameOver) {
     return (
-      <main className="container relative flex flex-col justify-center h-full my-8 grow">
+      <main className="container relative flex flex-col justify-center h-full my-8">
         <div className="flex flex-col gap-4 p-8 mx-auto rounded bg-card">
           <h1 className="my-4 text-2xl text-accent">Congratulations!</h1>
           <p>You completed the game in {formatTime(timer)}</p>
@@ -140,16 +146,24 @@ const GamePage = () => {
   }
 
   return (
-    <main className="container flex flex-col h-full my-8 grow">
+    <main >
       {gameStarted ? (
         <section className="flex flex-col">
-          <div className="sticky top-0 left-0 z-50 flex justify-between w-full ">
-            <h1 className={`my-4 text-2xl  : ""}`}>
-              <span className={`hidden md:inline-block ${redTimer ? "text-red-500" : ""}`}>Elapsed Time:</span>{" "}
+          <div className="sticky left-0 z-50 flex justify-between w-full pt-2 bg-background top-14 ">
+            <h1 className="text-lg  md:text-2xl">
               <span
               className={`${redTimer ? "text-red-500" : ""}`}
               >
-                {formatTime(timer)}
+                {paused ? 'Game is paused' :
+                <>
+                <span>Remaining: {remainingCountries}</span> <br />
+                 <span className={`hidden md:inline-block ${redTimer ? "text-red-500" : ""}`}>Elapsed Time:{" "}
+                </span>
+                {
+                  formatTime(timer)
+                }
+                </>
+                }
                 </span>
               {redTimer ? (
                 <span>
@@ -168,7 +182,7 @@ const GamePage = () => {
               />
               <Button
                 variant={"game_option"}
-                disabled={timesPaused === 0 ? false : true}
+                disabled={timesPaused > 0 && !paused}
                 onClick={handleTogglePauseGame}
               >
                 {paused ? "Resume" : "Pause"}
@@ -182,7 +196,7 @@ const GamePage = () => {
           </div>
         </section>
       ) : (
-        <section className="my-auto text-center ">
+        <section className="mt-32 text-center">
           <h1 className="my-4 text-4xl text-accent">Geomatch Showdown</h1>
           <Button
             className="px-10 py-8 mx-auto text-xl font-extrabold md:text-4xl w-fit rounded-xl text-primary-foreground bg-primary hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent"

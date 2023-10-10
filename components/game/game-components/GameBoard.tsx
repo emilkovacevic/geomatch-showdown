@@ -18,7 +18,7 @@ interface GameBoardProps {
 
 const GameBoard = ({ elapsedTime }: GameBoardProps) => {
   const session = useSession();
-  const { setGameTimer, setGameOver, setGamePenaltyTime, gameOver, setRedTimer } = useGameState();
+  const { setGameTimer, setGameOver, setGamePenaltyTime, setRedTimer, setRemainingCountries } = useGameState();
   const { toast } = useToast();
 
   const countries: Country[] = WORLD_DATA.map((entry) => ({
@@ -55,8 +55,8 @@ const GameBoard = ({ elapsedTime }: GameBoardProps) => {
       );
 
       // Select new cards
-      const newCountryCards: Country[] = unusedCountries.slice(0, 16);
-      const newCapitalCards: Country[] = unusedCapitals.slice(0, 16);
+      const newCountryCards: Country[] = unusedCountries.slice(0, 9);
+      const newCapitalCards: Country[] = unusedCapitals.slice(0, 9);
 
       setSelectedCountries(newCountryCards);
       setSelectedCapitals(newCapitalCards);
@@ -75,9 +75,11 @@ const GameBoard = ({ elapsedTime }: GameBoardProps) => {
       ]);
       setCards(newCards);
     }
+
   }, [cards, usedCardIds, countries, capitals]);
 
   useEffect(() => {
+    setRemainingCountries(WORLD_DATA.length - usedCardIds.length);
     if (matchedPairs.length === countries.length) {
       setGameOver(true);
       setGameTimer(elapsedTime);
@@ -109,7 +111,7 @@ const GameBoard = ({ elapsedTime }: GameBoardProps) => {
         postScore();
       }
     }
-  }, [matchedPairs, setGameTimer, elapsedTime, setGameOver, session.status, countries.length, toast, session?.data?.user.email]);
+  }, [matchedPairs, setGameTimer, elapsedTime, setGameOver, session.status, countries.length, toast, session?.data?.user.email, setRemainingCountries, usedCardIds.length]);
   
 
   const handleCardClick = (index: number) => {
@@ -163,15 +165,16 @@ const GameBoard = ({ elapsedTime }: GameBoardProps) => {
     }
   };
 
+  
+
   return (
     <section >
-      {gameOver && <h2>End is Reached</h2>}
       <div
-      className="grid items-center h-full grid-cols-2 gap-2 mt-10 md:grid-cols-6 lg:gap-4"
+      className="grid items-center h-full grid-cols-2 gap-2 mt-2 md:grid-cols-6 lg:gap-4"
       >
       {cards.map((card, index) => (
         <Button
-          className="px-2 py-4 font-bold shadow bg-card hover:border focus:border text-foreground"
+          className="px-2 py-8 font-bold shadow bg-card text-foreground"
           key={index}
           onClick={() => handleCardClick(index)}
           style={{

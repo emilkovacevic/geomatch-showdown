@@ -16,6 +16,18 @@ import Input from "../Input";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 interface ProfileData {
   name: string  | null | undefined;
   imageUrl: string | null | undefined;
@@ -128,7 +140,7 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
           .patch("/api/update-profile", requestData)
           .then((response) => {
             toast({
-              title: "Account Updated",
+              title: "Account Updated, refresh the page to see the changes",
             });
             reset();
             setEditProfile(false);
@@ -151,7 +163,11 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
   return (
     <div>
       {isSetEdit ? (
-        <section className="absolute top-0 left-0 z-50 grid items-center justify-center w-full min-h-screen bg-black/50">
+        <AlertDialog open={isSetEdit}>
+          <AlertDialogTrigger>
+            Update Profile
+          </AlertDialogTrigger>
+          <AlertDialogContent>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="relative p-4 space-y-4 shadow rounded-xl w-fit bg-card text-foreground"
@@ -236,7 +252,8 @@ const EditProfile = ({ user_id }: { user_id: string }) => {
               </Button>
             </div>
           </form>
-        </section>
+          </AlertDialogContent>
+        </AlertDialog>
       ) : (
           <Button
             variant={"game_option"}
