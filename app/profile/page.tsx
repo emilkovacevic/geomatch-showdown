@@ -35,10 +35,9 @@ const page = async () => {
       </main>
     );
   return (
-    <div className="container flex flex-wrap justify-center h-full gap-4 my-8">
-      {/* Sidebar */}
-      <aside className="sticky left-0 w-full h-fit bg-card lg:w-1/4 top-10">
-        <div className="flex flex-row gap-4 space-y-2 lg:flex-col">
+    <div className="relative flex flex-wrap justify-center h-full gap-4 my-8">
+      <aside className="sticky top-0 w-full p-4 shadow lg:w-1/4 bg-card">
+        <div className="flex flex-col items-center space-y-4">
           <Image
             className="object-cover w-56 h-full mx-auto mt-4"
             width={300}
@@ -60,7 +59,7 @@ const page = async () => {
         </section>
       </aside>
       {/* Main content */}
-      <main className="flex-1 w-full p-4 mt-2 lg:mt-0 lg:w-3/4 bg-card">
+      <main className="flex-1 w-full p-4 mt-2 shadow lg:mt-0 lg:w-3/4 bg-card">
         <section>
           <ScrollArea>
             <div className="p-4">
@@ -76,9 +75,7 @@ const page = async () => {
                 </TableHeader>
                 {player.scoreList.map((score) => (
                   <TableBody key={score.id}>
-                    <TableRow
-                    className="cursor-pointer hover:bg-black/50"
-                    >
+                    <TableRow className="cursor-pointer hover:bg-black/50">
                       <TableCell>{formatTime(score.score)}</TableCell>
                       <TableCell className="text-right">
                         {formatDate(score.createdAt.toISOString())}

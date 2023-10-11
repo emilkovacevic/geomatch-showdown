@@ -9,6 +9,7 @@ import RestartGameDialog from "@/components/game/game-components/RestartGameDial
 import ClientOnly from "@/lib/client-only";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { Pause, Play } from "lucide-react";
 
 const GamePage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -47,29 +48,29 @@ const GamePage = () => {
 
   const startGame = () => {
     setGameStarted(true);
-    setLocalTimer(0)
-    if(paused){
-      togglePauseGame()
+    setLocalTimer(0);
+    if (paused) {
+      togglePauseGame();
     }
     setLastTimestamp(performance.now());
   };
 
   const handleTogglePauseGame = () => {
-    if(timesPaused === 0 ){
-      setTimesPaused(1)
-      togglePauseGame()
+    if (timesPaused === 0) {
+      setTimesPaused(1);
+      togglePauseGame();
     }
-    if(paused){
-      togglePauseGame()
+    if (paused) {
+      togglePauseGame();
     }
   };
 
-    // reset game state on refresh
-    useEffect(() => {
-      resetGame()
-      
+  // reset game state on refresh
+  useEffect(() => {
+    resetGame();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  }, []);
 
   useEffect(() => {
     let requestId: number | null = null;
@@ -103,19 +104,26 @@ const GamePage = () => {
         cancelAnimationFrame(requestId);
       }
     };
-  }, [gameStarted, gameOver, lastTimestamp, paused, remainingCountries, setLocalTimer]);
+  }, [
+    gameStarted,
+    gameOver,
+    lastTimestamp,
+    paused,
+    remainingCountries,
+    setLocalTimer,
+  ]);
 
   if (!isLoaded) {
     return (
-      <div className="relative flex flex-col justify-center h-full my-8 text-center grow">
+      <main className="container relative flex flex-col justify-center h-full my-8">
         <h1 className="text-xl">Loading...</h1>
-      </div>
+      </main>
     );
   }
 
   if (gameOver) {
     return (
-      <main className="container relative flex flex-col justify-center h-full my-8">
+      <main className="flex flex-col flex-1">
         <div className="flex flex-col gap-4 p-8 mx-auto rounded bg-card">
           <h1 className="my-4 text-2xl text-accent">Congratulations!</h1>
           <p>You completed the game in {formatTime(timer)}</p>
@@ -146,38 +154,42 @@ const GamePage = () => {
   }
 
   return (
-    <main
-    >
-      
+    <main className="flex flex-col flex-1">
       {gameStarted ? (
-        <section 
-        className="flex flex-col">
-          <div className="sticky left-0 z-50 flex items-center justify-between w-full p-4 pt-2 bg-card top-14 ">
+        <section className="flex flex-col mt-4">
+          <div className="sticky left-0 z-30 flex items-center justify-between w-full p-4 pt-2 shadow-md bg-card top-20 md:top-10">
             <h1 className="text-lg md:text-2xl">
-              <span
-              className={`${redTimer ? "text-red-500" : ""}`}
-              >
-                {paused ? 'Game is paused' :
-                <>
-                <span>Uncovered Remaining: {remainingCountries} Countries</span> <br />
-                 <span className={`hidden md:inline-block ${redTimer ? "text-red-500" : ""}`}>Elapsed Time:{" "}
-                </span>
-                {
-                  formatTime(timer)
-                }
-                </>
-                }
-                </span>
-              {redTimer ? (
-                <span>
-                 <span className="mx-4">:</span>
-                  <span className="font-extrabold text-red-500">
-                  GAME FROZEN! Penalty 5 seconds
-                  </span>
-                </span>
-              ) : null}
+              <span className={`${redTimer ? "text-red-500" : ""}`}>
+                {paused ? (
+                  "Game is paused"
+                ) : (
+                  <>
+                    <span>
+                      Uncovered Remaining : {remainingCountries} Countries
+                    </span>{" "}
+                    <br />
+                    <span
+                      className={`hidden md:inline-block ${
+                        redTimer ? "text-red-500" : ""
+                      }`}
+                    >
+                      Elapsed Time :
+                    </span>{" "}
+                    {formatTime(timer)}
+                  </>
+                )}
+              </span>
             </h1>
-            <div className="inline-flex items-center gap-4">
+            {redTimer ? (
+              <div className="absolute top-0 left-0 inline-flex items-center justify-center w-full h-full bg-red-500">
+                <h2 className="text-lg font-extrabold">
+                  <span className="font-extrabold text-accent-foreground">
+                    GAME FROZEN! Penalty 5 seconds
+                  </span>
+                </h2>
+              </div>
+            ) : null}
+            <div className="flex flex-wrap justify-end gap-4">
               <RestartGameDialog
                 restartAlert={restartAlert}
                 setRestartAlert={setRestartAlert}
@@ -188,7 +200,8 @@ const GamePage = () => {
                 disabled={timesPaused > 0 && !paused}
                 onClick={handleTogglePauseGame}
               >
-                {paused ? "Resume" : "Pause"}
+                {paused ? <Play /> : <Pause />}
+                {paused ? " Resume" : " Pause"}
               </Button>
             </div>
           </div>
@@ -199,7 +212,7 @@ const GamePage = () => {
           </div>
         </section>
       ) : (
-        <section className="mt-32 text-center">
+        <section className="p-4 py-8 my-auto text-center rounded shadow bg-card">
           <h1 className="my-4 text-4xl text-accent">Geomatch Showdown</h1>
           <Button
             className="px-10 py-8 mx-auto text-xl font-extrabold md:text-4xl w-fit rounded-xl text-primary-foreground bg-primary hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent"

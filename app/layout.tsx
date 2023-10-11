@@ -25,9 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} flex flex-col min-h-screen bg-blue-400/40 dark:bg-blue-950/50 bg-no-repeat bg-cover`}
-    style={{ 
-      backgroundImage: `url(${backgroundImage.src})`,}}
+      <body className={inter.className}
     >
         <AuthProvider>
           <ThemeProvider
@@ -39,7 +37,7 @@ export default function RootLayout({
           >
             <div className="flex flex-col min-h-screen">
             <Header />
-            <div className="container m-2 mx-auto grow">
+            <div className="container flex flex-col flex-1 ">
               {children}
             </div>
             <Footer />

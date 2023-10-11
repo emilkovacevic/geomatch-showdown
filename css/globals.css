@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 0, 0%, 90%;
+    --background: 197, 100%, 69%;
     --foreground: 0, 0%, 0%;
     --card: 0, 0%, 100%;
     --card-foreground: 0, 0%, 0%;
@@ -27,7 +27,7 @@
   }
  
   .dark {
-    --background: 0, 0%, 10%;
+    --background: 197, 100%, 13.5%;
     --foreground: 0, 0%, 100%;
     --card: 0, 0%, 15%;
     --card-foreground: 0, 0%, 100%;
@@ -51,10 +51,20 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  html{
+    scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground;    
+    margin: 0;
+    padding: 0;
+    background-image: url('/world-image.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover !important;
+    -moz-background-size: cover !important;
+    -o-background-size: cover !important;
+    width: 100vw;
+    height: 100%;
   }
 }

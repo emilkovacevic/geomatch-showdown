@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import useGameState from "@/store/game-store";
+import { RotateCcw } from "lucide-react";
 
 interface RestartGameDialogProps {
   restartAlert: boolean;
@@ -41,7 +42,7 @@ const RestartGameDialog = ({
       <AlertDialogTrigger >
         <Button
         variant={"game_option"}
-        onClick={() => setRestartAlert(true)}>Restart</Button>
+        onClick={() => setRestartAlert(true)}><RotateCcw className="mr-2"/>Restart</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

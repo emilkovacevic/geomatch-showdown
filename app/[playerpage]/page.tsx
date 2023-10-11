@@ -26,29 +26,28 @@ export default async function Page({
   if (!player) return <div>Player not found</div>;
 
   return (
-    <div className="container relative flex flex-wrap justify-center h-full gap-4 my-8">
+    <div className="relative flex flex-wrap justify-center h-full gap-4 my-8">
       {/* Sidebar */}
-      <aside className="w-full lg:w-1/4">
-        <div className="sticky flex flex-row gap-4 space-y-2 lg:flex-col bg-card">
-          <Image
-            className="object-cover w-56 h-full mx-auto mt-4"
-            width={300}
-            height={300}
-            alt={player.name || ""}
-            src={player.image || "/person.jpg"}
-          />
-          <section
-          className="px-4 pb-4"
-          >
-            <h1 className="mb-4 text-3xl font-bold">{player.name}</h1>
-            <h2 className="my-2 text-lg font-semibold">Best Scores</h2>
-            <div>Completed in: {formatTime(player.score)}</div>
-            <div>Date: {formatDate(player.updatedAt.toISOString())}</div>
-          </section>
-        </div>
-      </aside>
+      <aside className="sticky top-0 w-full p-4 shadow lg:w-1/4 bg-card">
+  <div className="flex flex-col items-center space-y-4">
+    <Image
+      className="object-cover w-56 h-56 mx-auto"
+      width={300}
+      height={300}
+      alt={player.name || ""}
+      src={player.image || "/person.jpg"}
+    />
+    <section className="text-center lg:text-left">
+      <h1 className="text-3xl font-bold">{player.name}</h1>
+      <h2 className="text-lg font-semibold">Best Scores</h2>
+      <div>Completed in: {formatTime(player.score)}</div>
+      <div>Date: {formatDate(player.updatedAt.toISOString())}</div>
+    </section>
+  </div>
+</aside>
+
       {/* Main content */}
-      <main className="flex-1 w-full p-4 mt-2 lg:mt-0 lg:w-3/4 bg-card">
+      <main className="flex-1 w-full p-4 mt-2 shadow lg:mt-0 lg:w-3/4 bg-card">
           <section>
             <ScrollArea>
               <div className="p-4">

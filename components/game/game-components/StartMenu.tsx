@@ -1,6 +1,6 @@
 const GameStartMenu = () => {
   return (
-    <section className="mx-auto ">
+    <section className="mx-auto">
       <h2 className="my-4 text-xl font-semibold uppercase">Game rules</h2>
       <ul className="space-y-1 tracking-wide list-disc list-inside">
         <li>Select the correct country-capital pairs</li>
@@ -20,17 +20,6 @@ const GameStartMenu = () => {
           saved when completed.
         </li>
       </ul>
-
-      {/* TODO: ADD ANTICHEATS */}
-      {/* <h2  className="mt-10 mb-4 font-semibold tracking-wider text-md">
-            Attempting to cheat will be detected and restart the game:
-         </h2>
-            <ol className="mt-2 ml-6 space-y-1 tracking-wide list-decimal list-inside">
-              <li>Do not use other tabs</li>
-              <li>Do not click outside the game window</li>
-              <li>Do not refresh the page</li>
-              <li>Do not open development tools</li>
-            </ol> */}
     </section>
   );
 };

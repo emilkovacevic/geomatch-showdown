@@ -171,7 +171,7 @@ const GameBoard = ({ elapsedTime }: GameBoardProps) => {
     <section 
     >
       <div
-      className="grid items-center h-full grid-cols-2 gap-4 p-4 mt-2 bg-card md:grid-cols-6 lg:gap-4"
+      className="grid items-center h-full grid-cols-2 gap-4 p-4 mt-2 shadow-md bg-card md:grid-cols-6 lg:gap-4"
       >
       {cards.map((card, index) => (
         <Button
